@@ -13,4 +13,8 @@ public class UserService {
     public User getById(Long id){
         return userRepository.findById(id).orElse(null);
     }
+
+    public void addUser(User user){
+        userRepository.saveAndFlush(user);
+    }
 }

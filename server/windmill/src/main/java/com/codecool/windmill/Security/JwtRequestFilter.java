@@ -17,6 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -24,15 +26,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
-    private final RequestMatcher ignoredPaths = new AntPathRequestMatcher("/**/login");
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (this.ignoredPaths.matches(request)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         String token = request.getHeader("Authorization");
 
         String username = null;
@@ -66,5 +62,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException
+    {
+        final List<RequestMatcher> ignoredPaths = new ArrayList<>();
+        ignoredPaths.add(new AntPathRequestMatcher("/**/login"));
+        ignoredPaths.add(new AntPathRequestMatcher("/**/register"));
+
+        return ignoredPaths.stream().anyMatch(antPattern -> antPattern.matches(request));
     }
 }

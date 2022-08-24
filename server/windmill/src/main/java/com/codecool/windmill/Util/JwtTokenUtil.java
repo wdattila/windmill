@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -32,6 +33,18 @@ public class JwtTokenUtil {
 
     public String getUsernameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public Date getExpirationFromToken(String token){
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public boolean isExpired(String token){
+        return new Date(System.currentTimeMillis()).after(getExpirationFromToken(token));
+    }
+
+    public boolean validateToken(String token, UserDetails user){
+        return getUsernameFromToken(token).equals(user.getUsername()) && !isExpired(token);
     }
 
     private String buildToken(Map<String, Object> claims, String subject){

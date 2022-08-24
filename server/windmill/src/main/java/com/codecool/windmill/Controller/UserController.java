@@ -6,6 +6,7 @@ import com.codecool.windmill.Service.UserService;
 import com.codecool.windmill.Util.JwtTokenUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,8 +28,6 @@ public class UserController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/get/{id}")
     public UserDTO getUser(@PathVariable(name = "id") Long id){
@@ -36,10 +35,12 @@ public class UserController {
         return modelMapper.map(user, UserDTO.class);
     }
 
-    @PostMapping("/post")
+    @PostMapping("/register")
     public ResponseEntity<?> postUser(@RequestBody User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.addUser(user);
+        if(userService.userExist(user)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        }
+        userService.registerUser(user);
         return ResponseEntity.ok(modelMapper.map(user, UserDTO.class));
     }
 

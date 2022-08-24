@@ -30,6 +30,10 @@ public class JwtTokenUtil {
         return claimsConverter.apply(claims);
     }
 
+    public String getUsernameFromToken(String token){
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
     private String buildToken(Map<String, Object> claims, String subject){
         return Jwts.builder()
                 .setClaims(claims)

@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                 .cors().and().csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/**/login").permitAll()
+                        .antMatchers("/**/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling()

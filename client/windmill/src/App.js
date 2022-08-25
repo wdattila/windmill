@@ -6,6 +6,7 @@ import RequiredAuth from './Context/RequiredAuth';
 import LoginForm from './Components/LoginForm';
 import Logout from './Components/Logout';
 import Landing from './Components/Landing';
+import RegisterForm from './Components/RegisterForm';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             </Route>
             <Route path='/login' element={<LoginForm />} />
             <Route path='/logout' element={<Logout />} />
+            <Route path='/register' element={<RegisterForm />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

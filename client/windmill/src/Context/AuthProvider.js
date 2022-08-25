@@ -18,7 +18,12 @@ let AuthProvider = ({children}) => {
         }
     }
 
-    const values = {accessToken, signIn}
+    const signOut = () => {
+        localStorage.removeItem('access_token');
+        setAccessToken(localStorage.getItem('access_token'));
+    }
+
+    const values = {accessToken, signIn, signOut}
 
     return <AuthContext.Provider value={values}>
         {children}

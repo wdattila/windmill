@@ -4,6 +4,7 @@ import AuthProvider from './Context/AuthProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import RequiredAuth from './Context/RequiredAuth';
 import LoginForm from './Components/LoginForm';
+import Logout from './Components/Logout';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               
             </Route>
             <Route path='/login' element={<LoginForm />} />
+            <Route path='/logout' element={<Logout />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

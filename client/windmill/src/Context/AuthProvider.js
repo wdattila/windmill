@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { login } from "../Api/UserApi";
+import { login, register } from "../Api/UserApi";
 
 let AuthContext = createContext(null);
 
@@ -23,7 +23,13 @@ let AuthProvider = ({children}) => {
         setAccessToken(localStorage.getItem('access_token'));
     }
 
-    const values = {accessToken, signIn, signOut}
+    const signUp = async (username, email, password, callback) => {
+        await register(username, email, password);
+        await signIn(username, password);
+        callback();
+    }
+
+    const values = {accessToken, signIn, signOut, signUp}
 
     return <AuthContext.Provider value={values}>
         {children}
